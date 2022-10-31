@@ -1,62 +1,70 @@
 const canvas = document.getElementById("snake-canvas");
 const ctx = canvas.getContext("2d");
+const snake = [{
+  x: canvas.width / 2 - 30,
+  y:  canvas.height /2,
+},{
+  x: canvas.width / 2 - 15,
+  y: canvas.height /2,
+},{
+  x: canvas.width / 2,
+  y: canvas.height /2,
+}]
 addEventListener('keydown', (Pressed) =>{
   if (Pressed.key === "w"){
-    Snake.up = "yes"
-    Snake.down = "no"
-    Snake.left = "no"
-    Snake.right = "no"
+    Snakedata.up = "yes"
+    Snakedata.down = "no"
+    Snakedata.left = "no"
+    Snakedata.right = "no"
   }
 });
 addEventListener('keydown', (Pressed) =>{
   if (Pressed.key === "s"){
-    Snake.up = "no"
-    Snake.down = "yes"
-    Snake.left = "no"
-    Snake.right = "no"
+    Snakedata.up = "no"
+    Snakedata.down = "yes"
+    Snakedata.left = "no"
+    Snakedata.right = "no"
   }
 });
 addEventListener('keydown', (Pressed) =>{
   if (Pressed.key === "a"){
-    Snake.up = "no"
-    Snake.down = "no"
-    Snake.left = "yes"
-    Snake.right = "no"
+    Snakedata.up = "no"
+    Snakedata.down = "no"
+    Snakedata.left = "yes"
+    Snakedata.right = "no"
   }
 });
 addEventListener('keydown', (Pressed) =>{
   if (Pressed.key === "d"){
-    Snake.up = "no"
-    Snake.down = "no"
-    Snake.left = "no"
-    Snake.right = "yes"
+    Snakedata.up = "no"
+    Snakedata.down = "no"
+    Snakedata.left = "no"
+    Snakedata.right = "yes"
   }
 });
 let Apple = {
   x:"undefined",
   y:"undefined",
 }
-let Snake = {
-  pixelswide: 15,
-  y: canvas.height / 2,
-  x: canvas.width / 2,
+let Snakedata = {
+    pixelswide: 15,
   left: "no",
   right:"yes",
   up:"no",
   down:"no"
 }
 function MoveSnake(){
-  if (Snake.right === "yes"){
-    Snake.x += 5
+  if (Snakedata.right === "yes"){
+    Snakedata.x += Snakedata.pixelswide
   }
-  if (Snake.left === "yes"){
-    Snake.x -= 5
+  if (Snakedata.left === "yes"){
+    Snakedata.x -= Snakedata.pixelswide
   }
-  if (Snake.up === "yes"){
-    Snake.y -= 5
+  if (Snakedata.up === "yes"){
+    Snakedata.y -= Snakedata.pixelswide
   }
-  if (Snake.down === "yes"){
-    Snake.y += 5
+  if (Snakedata.down === "yes"){
+    Snakedata.y += Snakedata.pixelswide
   }
 }
 function SpawnApple(){
@@ -65,16 +73,19 @@ function SpawnApple(){
 function Draw(){
   canvas.height = document.documentElement.clientHeight;
 canvas.width = document.documentElement.clientWidth;
-  ctx.fillRect(Snake.x,Snake.y, Snake.pixelswide,15);
+  for (let i = 0; i < snake.length;i++ )[
+    ctx.fillRect(snake[i].x,snake[i].y, Snakedata.pixelswide,Snakedata.pixelswide)
+  ]
   if (SpawnApple() === "Spawned"){
+    ctx.fillStyle = "red"
     ctx.fillRect(Apple.x,Apple.y, 15,15)
     console.log("SPAWNING")
   }
 }
  var StopDrawing = setInterval(Draw,50)
-setInterval(MoveSnake,50)
+setInterval(MoveSnake,50 * 3)
 function GameOver(){
-  if (Snake.x >= canvas.width || Snake.x <= -15 || Snake.y >= canvas.height || Snake.y <= 0){
+  if (Snakedata.x >= canvas.width || Snakedata.x <= -15 || Snakedata.y >= canvas.height || Snakedata.y <= 0){
     clearInterval(StopCheckingIfGameIsOver);
     clearInterval(StopDrawing);
     ctx.fillStyle = "white"
@@ -85,5 +96,9 @@ function GameOver(){
   }
 }
  var StopCheckingIfGameIsOver = setInterval(GameOver,1)
- 
-setInterval(SpawnApple(); Apple.x = Math.floor(Math.random() * 800) Apple.y = Math.floor(Math.random() * 800),10000)
+
+setInterval(function() {
+  SpawnApple();
+  Apple.x = Math.floor(Math.random() * 800);
+  Apple.y = Math.floor(Math.random() * 800);
+}, 1000 * 25)
